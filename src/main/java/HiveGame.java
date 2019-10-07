@@ -15,6 +15,7 @@ public class HiveGame implements Hive {
 
     public HiveGame() {
         this.board = new HashMap<>();
+        this.stoneList = new HashMap<>();
         // give each player their stones
         handOutStones();
         currentPlayer = Player.WHITE; // white starts

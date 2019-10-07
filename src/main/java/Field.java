@@ -20,6 +20,10 @@ class Field {
         return color;
     }
 
+    public void addTile(Hive.Tile tile) {
+        stones.push(tile);
+    }
+
     @Override
     public String toString() {
         String stonesStr = stones.stream().map(Object::toString).collect(Collectors.joining(","));
