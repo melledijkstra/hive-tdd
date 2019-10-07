@@ -21,8 +21,7 @@ public class App {
                 }
                 // play the game with the given input
                 System.out.println(s.hashCode());
-            } catch (IOException e) {
-                continue;
+            } catch (IOException ignored) {
             }
         }
     }

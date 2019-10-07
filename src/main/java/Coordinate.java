@@ -2,15 +2,15 @@ import java.util.Objects;
 
 public class Coordinate {
 
-    private int x, y;
+    private int q, r;
 
-    public Coordinate(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Coordinate(int q, int r) {
+        this.q = q;
+        this.r = r;
     }
 
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(q, r);
     }
 
     public boolean equals(Object obj) {
@@ -20,11 +20,11 @@ public class Coordinate {
             return false;
 
         Coordinate other = (Coordinate) obj;
-        return this.x == other.x && this.y == other.y;
+        return this.q == other.q && this.r == other.r;
     }
 
     public String toString() {
-        return String.format("(%d,%d)", this.x, this.y);
+        return String.format("(%d,%d)", this.q, this.r);
     }
 
 }
