@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Coordinate {
@@ -27,4 +28,18 @@ public class Coordinate {
         return String.format("(%d,%d)", this.q, this.r);
     }
 
+    public int[] getCoordinates() {
+        return new int[]{q, r};
+    }
+
+    public ArrayList<Coordinate> getNeighbours() {
+        return new ArrayList<Coordinate>() {{
+            add(new Coordinate(q + 1, r));
+            add(new Coordinate(q, r + 1));
+            add(new Coordinate(q - 1, r + 1));
+            add(new Coordinate(q - 1, r));
+            add(new Coordinate(q, r - 1));
+            add(new Coordinate(q + 1, r - 1));
+        }};
+    }
 }

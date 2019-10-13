@@ -5,12 +5,12 @@ public interface Hive {
     /**
      * Play a new tile.
      *
-     * @param tile Tile to play
+     * @param tileType Tile to play
      * @param q    Q coordinate of hexagon to play to
      * @param r    R coordinate of hexagon to play to
      * @throws IllegalMove If the tile could not be played
      */
-    void play(Tile tile, int q, int r) throws IllegalMove;
+    void play(TileType tileType, int q, int r) throws IllegalMove;
 
     /**
      * Move an existing tile.
@@ -61,7 +61,7 @@ public interface Hive {
     /**
      * Types of tiles.
      */
-    enum Tile {QUEEN_BEE, SPIDER, BEETLE, GRASSHOPPER, SOLDIER_ANT}
+    enum TileType {QUEEN_BEE, SPIDER, BEETLE, GRASSHOPPER, SOLDIER_ANT}
 
     /**
      * Players.

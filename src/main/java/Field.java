@@ -3,31 +3,24 @@ import java.util.stream.Collectors;
 
 class Field {
 
-    private Stack<Hive.Tile> stones;
-    private Hive.Player color;
+    private Stack<Hive.TileType> stones;
 
-    Field(Hive.Tile tile, Hive.Player color) {
+    Field(Hive.TileType tileType) {
         stones = new Stack<>();
-        stones.push(tile);
-        this.color = color;
+        stones.push(tileType);
     }
 
-    public Stack<Hive.Tile> getStones() {
+    public Stack<Hive.TileType> getStones() {
         return stones;
     }
 
-    public Hive.Player getColor() {
-        return color;
-    }
-
-    public void addTile(Hive.Tile tile) {
-        stones.push(tile);
+    public void addTile(Hive.TileType tileType) {
+        stones.push(tileType);
     }
 
     @Override
     public String toString() {
         String stonesStr = stones.stream().map(Object::toString).collect(Collectors.joining(","));
-        String color = this.color == Hive.Player.BLACK ? "B" : "W";
-        return String.format("[%s] size: %d, color: %s", stonesStr, stones.size(), color);
+        return String.format("[%s] size: %d", stonesStr, stones.size());
     }
 }

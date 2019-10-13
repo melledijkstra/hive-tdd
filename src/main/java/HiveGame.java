@@ -1,59 +1,52 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Contains the main Hive game data
  */
 public class HiveGame implements Hive {
 
-    private HashMap<Coordinate, Field> board;
-
     private Player currentPlayer;
 
-    private HashMap<Player, ArrayList<Tile>> stoneList;
+    private HashMap<Coordinate, Tile> board = new HashMap<>();
 
-    public HiveGame() {
-        this.board = new HashMap<>();
-        this.stoneList = new HashMap<>();
-        // give each player their stones
-        handOutStones();
-        currentPlayer = Player.WHITE; // white starts
-    }
-
-    private void handOutStones() {
-        // the initial tiles for each player
-        Tile[] tileList = new Tile[]{
-                Tile.QUEEN_BEE,
-                Tile.SPIDER, Tile.SPIDER,
-                Tile.BEETLE, Tile.BEETLE,
-                Tile.SOLDIER_ANT, Tile.SOLDIER_ANT, Tile.SOLDIER_ANT,
-                Tile.GRASSHOPPER, Tile.GRASSHOPPER, Tile.GRASSHOPPER
-        };
-        for (Player p : Player.values()) { // give the list of stones to each player
-            stoneList.put(p, new ArrayList<>(Arrays.asList(tileList)));
+    @Override
+    public void play(TileType tileType, int q, int r) throws IllegalMove {
+        Tile tile = board.get(new Coordinate(0, 0));
+        if (tile == null) {
+            board.put(new Coordinate(q, r), new Tile(Player.WHITE, tileType));
+        } else {
+            tile.addTile(tileType);
         }
     }
 
     @Override
-    public void play(Tile tile, int q, int r) throws IllegalMove {
-        // 4. Een steen spelen
-        if (isValidPlay(tile, q, r)) {
-            board.put(new Coordinate(q, r), new Field(Tile.QUEEN_BEE, currentPlayer));
-            // switch the player, only when play is valid?
-            currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
+    public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
+        Coordinate from = new Coordinate(fromQ, fromR);
+        Tile tile = board.get(from); // retrieve the tile from the board
+        board.remove(from); // delete tile from the board
+        if(tile == null) {
+            throw new IllegalMove("There is no Tile on this coordinate!");
         }
+        board.put(new Coordinate(toQ, toR), tile); // move the tile to new position
+    }
+
+    @Override
+    public void pass() throws IllegalMove {
+
     }
 
     /**
      * Checks if a given move is possible for current player
      *
-     * @param tile the type of tile being set
-     * @param q    the q coordinate
-     * @param r    the r coordinate
+     * @param tileType the type of tile being set
+     * @param q        the q coordinate
+     * @param r        the r coordinate
      * @return if the move is valid
      */
-    private boolean isValidPlay(Tile tile, int q, int r) {
+    private boolean isValidPlay(TileType tileType, int q, int r) {
         // a. Een speler mag alleen zijn eigen nog niet gespeelde stenen spelen.
 
         // b. Een speler speelt een steen door deze op een leeg vlak in het speelveld te leggen.
@@ -69,16 +62,6 @@ public class HiveGame implements Hive {
     }
 
     @Override
-    public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
-        // 5. Een steen verplaatsen & 6. Een steen verschuiven
-    }
-
-    @Override
-    public void pass() throws IllegalMove {
-        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
-    }
-
-    @Override
     public boolean isWinner(Player player) {
         return false;
     }
@@ -90,5 +73,19 @@ public class HiveGame implements Hive {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Map<TileType, Integer> getTiles(Player player) {
+        return new HashMap<TileType, Integer>() {{
+            put(TileType.QUEEN_BEE, 1);
+            put(TileType.SPIDER, 2);
+            put(TileType.BEETLE, 2);
+            put(TileType.SOLDIER_ANT, 3);
+            put(TileType.GRASSHOPPER, 3);
+        }};
+    }
+
+    public HashMap<Coordinate, Tile> getBoard() {
+        return board;
     }
 }
