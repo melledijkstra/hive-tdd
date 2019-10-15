@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,6 +88,25 @@ public class HiveGame implements Hive {
 
     @Override
     public boolean isDraw() {
+        if(getBoard().size() >=2){
+            for (Coordinate key : getBoard().keySet()) {
+                if(getBoard().get(key).getTiles().search(TileType.QUEEN_BEE)==1){
+
+                    Player color = getBoard().get(key).getColor();
+                    Player opponent = (color == Player.WHITE) ? Player.BLACK : Player.WHITE;
+
+                    ArrayList<Coordinate> neighbours;
+                    neighbours = key.getNeighbours();
+                    for(Coordinate neighbour :neighbours){
+                        if(getBoard().get(neighbour).getColor() != opponent){
+                            return false;
+                        }
+                    }
+                }
+
+            }
+            return true;
+        }
         return false;
     }
 
