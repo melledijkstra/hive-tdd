@@ -126,7 +126,42 @@ class HiveGameTest {
     // d. Als beide spelers tegelijk zouden winnen is het in plaats daarvan een gelijkspel.
     @Test
     void testIfItsADrawWhenBothPlayersWouldWin() {
-
+        HiveGame game = spy(HiveGame.class);
+        when(game.getBoard()).thenReturn(generateTiedBoard());
+        assertTrue(game.isDraw());
     }
 
+    /**
+     * Generates a tied board
+     *
+     * @return the board with a winner and loser
+     */
+    private HashMap<Coordinate, Tile> generateTiedBoard() {
+        Coordinate bee1Coordinate = new Coordinate(0, 0);
+        Coordinate bee2Coordinate = new Coordinate(10, 10);
+
+        ArrayList<Coordinate> neighboursBee1 = bee1Coordinate.getNeighbours();
+        ArrayList<Coordinate> neighboursBee2 = bee2Coordinate.getNeighbours();
+
+
+        HashMap<Coordinate, Tile> board = new HashMap<Coordinate, Tile>() {{
+            put(bee1Coordinate, new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
+            put(bee2Coordinate, new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE));
+
+        }};
+
+
+        int index = 0;
+        for (Coordinate neighbour : neighboursBee1) {
+            Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
+            board.put(neighbour, new Tile(Hive.Player.BLACK, type));
+            ++index;
+        }
+        index = 0;
+        for (Coordinate neighbour : neighboursBee2) {
+            Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
+            board.put(neighbour, new Tile(Hive.Player.WHITE, type));
+            ++index;        }
+        return board;
+    }
 }
