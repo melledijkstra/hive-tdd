@@ -1,5 +1,3 @@
-import java.util.Collection;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,30 +10,36 @@ public class HiveGame implements Hive {
 
     private HashMap<Coordinate, Tile> board = new HashMap<>();
 
+    public HiveGame() {
+        currentPlayer = Player.WHITE;
+    }
+
     @Override
     public void play(TileType tileType, int q, int r) throws IllegalMove {
-        Tile tile = board.get(new Coordinate(0, 0));
+        Tile tile = board.get(new Coordinate(q, r));
         if (tile == null) {
             board.put(new Coordinate(q, r), new Tile(Player.WHITE, tileType));
         } else {
             tile.addTile(tileType);
         }
+        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         Coordinate from = new Coordinate(fromQ, fromR);
         Tile tile = board.get(from); // retrieve the tile from the board
-        board.remove(from); // delete tile from the board
         if(tile == null) {
             throw new IllegalMove("There is no Tile on this coordinate!");
         }
+        board.remove(from); // delete tile from the board
         board.put(new Coordinate(toQ, toR), tile); // move the tile to new position
+        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
     @Override
     public void pass() throws IllegalMove {
-
+        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
     /**
@@ -63,6 +67,21 @@ public class HiveGame implements Hive {
 
     @Override
     public boolean isWinner(Player player) {
+        Player loser = (player == Player.WHITE) ? Player.BLACK : Player.WHITE;
+        for (Map.Entry<Coordinate, Tile> entry : getBoard().entrySet()) {
+            Tile tile = entry.getValue();
+            if (tile.getColor() != loser) {
+                continue;
+            }
+            if (tile.getTiles().contains(TileType.QUEEN_BEE)) {
+                for (Coordinate neighbour : entry.getKey().getNeighbours()) {
+                    if (!getBoard().containsKey(neighbour)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
         return false;
     }
 

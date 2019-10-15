@@ -16,7 +16,7 @@ public class Tile {
         return this.color;
     }
 
-    public Hive.TileType getType() {
+    public Hive.TileType getTopTile() {
         return tiles.peek();
     }
 
@@ -24,7 +24,7 @@ public class Tile {
         return tiles;
     }
 
-    public void addTile(Hive.TileType tile) {
+    void addTile(Hive.TileType tile) {
         tiles.push(tile);
     }
 

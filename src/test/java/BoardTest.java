@@ -45,7 +45,7 @@ class BoardTest {
         game.play(Hive.TileType.QUEEN_BEE, 0, 0);
         // assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(0, 0)).getType());
         game.move(0, 0, 10, 10);
-        assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(10, 10)).getType());
+        assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(10, 10)).getTopTile());
     }
 
     // f. In sommige gevallen mogen stenen op andere stenen liggen; in dat geval mag alleen de bovenste steen van
@@ -69,7 +69,7 @@ class BoardTest {
         game.play(Hive.TileType.SOLDIER_ANT, 0, 0);
         // move the top tile
         game.move(0, 0, 1, 1);
-        assertEquals(Hive.TileType.SOLDIER_ANT, game.getBoard().get(new Coordinate(1, 1)).getType());
+        assertEquals(Hive.TileType.SOLDIER_ANT, game.getBoard().get(new Coordinate(1, 1)).getTopTile());
     }
 
 
