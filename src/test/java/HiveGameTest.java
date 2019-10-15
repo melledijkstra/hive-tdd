@@ -134,7 +134,7 @@ class HiveGameTest {
     /**
      * Generates a tied board
      *
-     * @return the board with a winner and loser
+     * @return the board with a tied board
      */
     private HashMap<Coordinate, Tile> generateTiedBoard() {
         Coordinate bee1Coordinate = new Coordinate(0, 0);
@@ -164,4 +164,11 @@ class HiveGameTest {
             ++index;        }
         return board;
     }
+
+    @Test
+    void testWhetherPlayerCanOnlyPlayOwnNonePlayedTiles() {
+        HiveGame game = new HiveGame();
+        assertTrue(game.isValidPlay(new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE),new Coordinate(0,0)));
+    }
+
 }

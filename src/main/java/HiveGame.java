@@ -19,7 +19,7 @@ public class HiveGame implements Hive {
     public void play(TileType tileType, int q, int r) throws IllegalMove {
         Tile tile = board.get(new Coordinate(q, r));
         if (tile == null) {
-            board.put(new Coordinate(q, r), new Tile(Player.WHITE, tileType));
+            board.put(new Coordinate(q, r), new Tile(Player.WHITE, tileType));  /////Moet dit currentPlayer zijn?
         } else {
             tile.addTile(tileType);
         }
@@ -51,8 +51,11 @@ public class HiveGame implements Hive {
      * @param r        the r coordinate
      * @return if the move is valid
      */
-    private boolean isValidPlay(TileType tileType, int q, int r) {
+    public boolean isValidPlay(Tile tile, Coordinate coordinate) {
         // a. Een speler mag alleen zijn eigen nog niet gespeelde stenen spelen.
+        Map<TileType,Integer> availableTiles = getTiles(tile.getColor());
+
+        //if(availableTiles[tile.getTiles()])   //HEEFT REFACTOR SLAG NODIG
 
         // b. Een speler speelt een steen door deze op een leeg vlak in het speelveld te leggen.
 
