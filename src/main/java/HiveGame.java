@@ -9,7 +9,7 @@ public class HiveGame implements Hive {
 
     private Player currentPlayer;
 
-    private HashMap<Coordinate, Tile> board = new HashMap<>();
+    private HashMap<Coordinate, Field> board = new HashMap<>();
 
     public HiveGame() {
         currentPlayer = Player.WHITE;
@@ -18,11 +18,11 @@ public class HiveGame implements Hive {
     @Override
     public void play(TileType tileType, int q, int r) throws IllegalMove {
         if (isValidPlay(tileType, q, r)) {
-            Tile tile = board.get(new Coordinate(q, r));
-            if (tile == null) {
-                board.put(new Coordinate(q, r), new Tile(currentPlayer, tileType));  /////Moet dit currentPlayer zijn?
+            Field field = board.get(new Coordinate(q, r));
+            if (field == null) {
+                board.put(new Coordinate(q, r), new Field(new Tile(currentPlayer, tileType)));
             } else {
-                tile.addTile(tileType);
+                field.addTile(new Tile(currentPlayer, tileType));
             }
             currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
         }
@@ -31,12 +31,12 @@ public class HiveGame implements Hive {
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         Coordinate from = new Coordinate(fromQ, fromR);
-        Tile tile = board.get(from); // retrieve the tile from the board
-        if (tile == null) {
+        Field field = board.get(from); // retrieve the field from the board
+        if (field == null) {
             throw new IllegalMove("There is no Tile on this coordinate!");
         }
-        board.remove(from); // delete tile from the board
-        board.put(new Coordinate(toQ, toR), tile); // move the tile to new position
+        board.remove(from); // delete field from the board
+        board.put(new Coordinate(toQ, toR), field); // move the field to new position
         currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
@@ -74,12 +74,12 @@ public class HiveGame implements Hive {
     @Override
     public boolean isWinner(Player player) {
         Player loser = (player == Player.WHITE) ? Player.BLACK : Player.WHITE;
-        for (Map.Entry<Coordinate, Tile> entry : getBoard().entrySet()) {
-            Tile tile = entry.getValue();
-            if (tile.getColor() != loser) {
+        for (Map.Entry<Coordinate, Field> entry : getBoard().entrySet()) {
+            Field field = entry.getValue();
+            if (field.peek().getColor() != loser) { // todo: needs refactor
                 continue;
             }
-            if (tile.getTiles().contains(TileType.QUEEN_BEE)) {
+            if (field.contains(TileType.QUEEN_BEE)) {
                 for (Coordinate neighbour : entry.getKey().getNeighbours()) {
                     if (!getBoard().containsKey(neighbour)) {
                         return false;
@@ -98,8 +98,8 @@ public class HiveGame implements Hive {
         }
 
         for (Coordinate key : getBoard().keySet()) {
-            Tile tile = getBoard().get(key);
-            if (tile.getTiles().contains(TileType.QUEEN_BEE)) {
+            Field field = getBoard().get(key);
+            if (field.contains(TileType.QUEEN_BEE)) {
                 ArrayList<Coordinate> neighbours = key.getNeighbours();
                 for (Coordinate neighbour : neighbours) {
                     if (getBoard().get(neighbour) == null) {
@@ -126,7 +126,7 @@ public class HiveGame implements Hive {
         }};
     }
 
-    public HashMap<Coordinate, Tile> getBoard() {
+    public HashMap<Coordinate, Field> getBoard() {
         return board;
     }
 }

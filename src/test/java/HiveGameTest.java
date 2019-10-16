@@ -35,7 +35,7 @@ class HiveGameTest {
     @Test
     void testWhetherTileHasAType() {
         Tile tile = new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE);
-        assertNotNull(tile.getTopTile());
+        assertNotNull(tile.getType());
     }
 
     // c. Elke speler heeft aan het begin van het spel de beschikking over één bijenkoningin, twee spinnen,
@@ -104,19 +104,19 @@ class HiveGameTest {
      * @param loser the loser of the game, the other player will have
      * @return the board with a winner and loser
      */
-    private HashMap<Coordinate, Tile> generateWinBoard(Hive.Player loser) {
+    private HashMap<Coordinate, Field> generateWinBoard(Hive.Player loser) {
         Hive.Player winner = (loser == Hive.Player.BLACK) ? Hive.Player.WHITE : Hive.Player.BLACK;
         Coordinate beeCoordinate = new Coordinate(0, 0);
         ArrayList<Coordinate> neighbours = beeCoordinate.getNeighbours();
 
-        HashMap<Coordinate, Tile> board = new HashMap<Coordinate, Tile>() {{
-            put(beeCoordinate, new Tile(loser, Hive.TileType.QUEEN_BEE));
+        HashMap<Coordinate, Field> board = new HashMap<Coordinate, Field>() {{
+            put(beeCoordinate, new Field(new Tile(loser, Hive.TileType.QUEEN_BEE)));
         }};
 
         int index = 0;
         for (Coordinate neighbour : neighbours) {
             Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
-            board.put(neighbour, new Tile(winner, type));
+            board.put(neighbour, new Field(new Tile(winner, type)));
             ++index;
         }
 
@@ -136,29 +136,29 @@ class HiveGameTest {
      *
      * @return the board with a tied board
      */
-    private HashMap<Coordinate, Tile> generateTiedBoard() {
+    private HashMap<Coordinate, Field> generateTiedBoard() {
         Coordinate whiteBee = new Coordinate(0, 0);
         Coordinate blackBee = new Coordinate(10, 10);
 
         ArrayList<Coordinate> neighboursBee1 = whiteBee.getNeighbours();
         ArrayList<Coordinate> neighboursBee2 = blackBee.getNeighbours();
 
-        HashMap<Coordinate, Tile> board = new HashMap<Coordinate, Tile>() {{
-            put(whiteBee, new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
-            put(blackBee, new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE));
+        HashMap<Coordinate, Field> board = new HashMap<Coordinate, Field>() {{
+            put(whiteBee, new Field(new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE)));
+            put(blackBee, new Field(new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE)));
         }};
 
         int index = 0;
         for (Coordinate neighbour : neighboursBee1) {
             Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
-            board.put(neighbour, new Tile(Hive.Player.BLACK, type));
+            board.put(neighbour, new Field(new Tile(Hive.Player.BLACK, type)));
             ++index;
         }
 
         index = 0;
         for (Coordinate neighbour : neighboursBee2) {
             Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
-            board.put(neighbour, new Tile(Hive.Player.WHITE, type));
+            board.put(neighbour, new Field(new Tile(Hive.Player.WHITE, type)));
             ++index;
         }
         return board;
@@ -174,8 +174,8 @@ class HiveGameTest {
     @Test
     void testIfPlayerCanPlayQueenBeeTwice() {
         HiveGame game = spy(HiveGame.class);
-        when(game.getBoard()).thenReturn(new HashMap<Coordinate, Tile>() {{
-            put(new Coordinate(0, 0), new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
+        when(game.getBoard()).thenReturn(new HashMap<Coordinate, Field>() {{
+            put(new Coordinate(0, 0), new Field(new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE)));
         }});
     }
 

@@ -1,26 +1,32 @@
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 class Field {
 
-    private Stack<Hive.TileType> stones;
+    private Stack<Tile> tiles;
 
-    Field(Hive.TileType tileType) {
-        stones = new Stack<>();
-        stones.push(tileType);
+    Field(Tile tile) {
+        tiles = new Stack<>();
+        tiles.push(tile);
     }
 
-    public Stack<Hive.TileType> getStones() {
-        return stones;
+    public Stack<Tile> getTiles() {
+        return tiles;
     }
 
-    public void addTile(Hive.TileType tileType) {
-        stones.push(tileType);
+    void addTile(Tile tile) {
+        tiles.push(tile);
     }
 
-    @Override
-    public String toString() {
-        String stonesStr = stones.stream().map(Object::toString).collect(Collectors.joining(","));
-        return String.format("[%s] size: %d", stonesStr, stones.size());
+    Tile peek() {
+        return tiles.peek();
+    }
+
+    boolean contains(Hive.TileType tileType) {
+        for (Tile tile : tiles) {
+            if (tile.getType() == tileType) {
+                return true;
+            }
+        }
+        return false;
     }
 }
