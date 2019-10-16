@@ -43,8 +43,8 @@ class HiveGameTest {
     @Test
     void testIfPlayersEachHaveCorrectStartingTiles() {
         HiveGame game = new HiveGame();
-        Map<Hive.TileType, Integer> blackTiles = game.getTiles(Hive.Player.BLACK);
-        Map<Hive.TileType, Integer> whiteTiles = game.getTiles(Hive.Player.WHITE);
+        Map<Hive.TileType, Integer> blackTiles = game.getPlayerTiles(Hive.Player.BLACK);
+        Map<Hive.TileType, Integer> whiteTiles = game.getPlayerTiles(Hive.Player.WHITE);
 
         assertEquals(1, blackTiles.get(Hive.TileType.QUEEN_BEE));
         assertEquals(2, blackTiles.get(Hive.TileType.SPIDER));
@@ -84,7 +84,7 @@ class HiveGameTest {
         game.move(1, 1, 2, 1);
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
 
-        // HOW CAN WE WRITE THIS TEST BETTER?
+        // todo: HOW CAN WE WRITE THIS TEST BETTER?
     }
 
     // c. Een speler wint als alle zes velden naast de bijenkoningin van de tegenstander bezet zijn.
@@ -95,7 +95,7 @@ class HiveGameTest {
         when(game.getBoard()).thenReturn(generateWinBoard(Hive.Player.BLACK));
         assertTrue(game.isWinner(Hive.Player.WHITE));
 
-        // isWinner not has to call `getBoard()` instead of `this.board` otherwise test will fail, how to fix this?
+        // todo: isWinner not has to call `getBoard()` instead of `this.board` otherwise test will fail, how to fix this?
     }
 
     /**
@@ -137,19 +137,16 @@ class HiveGameTest {
      * @return the board with a tied board
      */
     private HashMap<Coordinate, Tile> generateTiedBoard() {
-        Coordinate bee1Coordinate = new Coordinate(0, 0);
-        Coordinate bee2Coordinate = new Coordinate(10, 10);
+        Coordinate whiteBee = new Coordinate(0, 0);
+        Coordinate blackBee = new Coordinate(10, 10);
 
-        ArrayList<Coordinate> neighboursBee1 = bee1Coordinate.getNeighbours();
-        ArrayList<Coordinate> neighboursBee2 = bee2Coordinate.getNeighbours();
-
+        ArrayList<Coordinate> neighboursBee1 = whiteBee.getNeighbours();
+        ArrayList<Coordinate> neighboursBee2 = blackBee.getNeighbours();
 
         HashMap<Coordinate, Tile> board = new HashMap<Coordinate, Tile>() {{
-            put(bee1Coordinate, new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
-            put(bee2Coordinate, new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE));
-
+            put(whiteBee, new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
+            put(blackBee, new Tile(Hive.Player.BLACK, Hive.TileType.QUEEN_BEE));
         }};
-
 
         int index = 0;
         for (Coordinate neighbour : neighboursBee1) {
@@ -157,18 +154,29 @@ class HiveGameTest {
             board.put(neighbour, new Tile(Hive.Player.BLACK, type));
             ++index;
         }
+
         index = 0;
         for (Coordinate neighbour : neighboursBee2) {
             Hive.TileType type = (index <= 2) ? Hive.TileType.SOLDIER_ANT : Hive.TileType.BEETLE;
             board.put(neighbour, new Tile(Hive.Player.WHITE, type));
-            ++index;        }
+            ++index;
+        }
         return board;
     }
 
     @Test
-    void testWhetherPlayerCanOnlyPlayOwnNonePlayedTiles() {
+    void testWhetherPlayerCanOnlyPlayOwnNonePlayedTiles() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
-        assertTrue(game.isValidPlay(new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE),new Coordinate(0,0)));
+        assertTrue(game.isValidPlay(Hive.TileType.QUEEN_BEE, 0, 0));
+
+    }
+
+    @Test
+    void testIfPlayerCanPlayQueenBeeTwice() {
+        HiveGame game = spy(HiveGame.class);
+        when(game.getBoard()).thenReturn(new HashMap<Coordinate, Tile>() {{
+            put(new Coordinate(0, 0), new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE));
+        }});
     }
 
 }

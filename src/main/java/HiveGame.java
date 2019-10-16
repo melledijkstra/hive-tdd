@@ -17,20 +17,22 @@ public class HiveGame implements Hive {
 
     @Override
     public void play(TileType tileType, int q, int r) throws IllegalMove {
-        Tile tile = board.get(new Coordinate(q, r));
-        if (tile == null) {
-            board.put(new Coordinate(q, r), new Tile(Player.WHITE, tileType));  /////Moet dit currentPlayer zijn?
-        } else {
-            tile.addTile(tileType);
+        if (isValidPlay(tileType, q, r)) {
+            Tile tile = board.get(new Coordinate(q, r));
+            if (tile == null) {
+                board.put(new Coordinate(q, r), new Tile(currentPlayer, tileType));  /////Moet dit currentPlayer zijn?
+            } else {
+                tile.addTile(tileType);
+            }
+            currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
         }
-        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         Coordinate from = new Coordinate(fromQ, fromR);
         Tile tile = board.get(from); // retrieve the tile from the board
-        if(tile == null) {
+        if (tile == null) {
             throw new IllegalMove("There is no Tile on this coordinate!");
         }
         board.remove(from); // delete tile from the board
@@ -46,14 +48,14 @@ public class HiveGame implements Hive {
     /**
      * Checks if a given move is possible for current player
      *
-     * @param tileType the type of tile being set
-     * @param q        the q coordinate
-     * @param r        the r coordinate
      * @return if the move is valid
      */
-    public boolean isValidPlay(Tile tile, Coordinate coordinate) {
+    public boolean isValidPlay(TileType tileType, int q, int r) throws IllegalMove {
         // a. Een speler mag alleen zijn eigen nog niet gespeelde stenen spelen.
-        Map<TileType,Integer> availableTiles = getTiles(tile.getColor());
+        HashMap<TileType, Integer> availableTiles = getPlayerTiles(currentPlayer);
+        if (availableTiles.get(tileType) == 0) {
+            throw new IllegalMove(String.format("There is no available tile of type: %s left for player: %s", tileType, currentPlayer));
+        }
 
         //if(availableTiles[tile.getTiles()])   //HEEFT REFACTOR SLAG NODIG
 
@@ -91,33 +93,30 @@ public class HiveGame implements Hive {
 
     @Override
     public boolean isDraw() {
-        if(getBoard().size() >=2){
-            for (Coordinate key : getBoard().keySet()) {
-                if(getBoard().get(key).getTiles().search(TileType.QUEEN_BEE)==1){
+        if (getBoard().size() < 10) {
+            return false;
+        }
 
-                    Player color = getBoard().get(key).getColor();
-                    Player opponent = (color == Player.WHITE) ? Player.BLACK : Player.WHITE;
-
-                    ArrayList<Coordinate> neighbours;
-                    neighbours = key.getNeighbours();
-                    for(Coordinate neighbour :neighbours){
-                        if(getBoard().get(neighbour).getColor() != opponent){
-                            return false;
-                        }
+        for (Coordinate key : getBoard().keySet()) {
+            Tile tile = getBoard().get(key);
+            if (tile.getTiles().contains(TileType.QUEEN_BEE)) {
+                ArrayList<Coordinate> neighbours = key.getNeighbours();
+                for (Coordinate neighbour : neighbours) {
+                    if (getBoard().get(neighbour) == null) {
+                        return false;
                     }
                 }
-
             }
-            return true;
         }
-        return false;
+
+        return true;
     }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public Map<TileType, Integer> getTiles(Player player) {
+    public HashMap<TileType, Integer> getPlayerTiles(Player player) {
         return new HashMap<TileType, Integer>() {{
             put(TileType.QUEEN_BEE, 1);
             put(TileType.SPIDER, 2);
