@@ -18,31 +18,48 @@ public class HiveGame implements Hive {
     @Override
     public void play(TileType tileType, int q, int r) throws IllegalMove {
         if (isValidPlay(tileType, q, r)) {
-            Field field = board.get(new Coordinate(q, r));
-            if (field == null) {
-                board.put(new Coordinate(q, r), new Field(new Tile(currentPlayer, tileType)));
-            } else {
-                field.addTile(new Tile(currentPlayer, tileType));
-            }
-            currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
+            place(tileType, q, r);
+            switchPlayer();
         }
     }
 
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
-        Coordinate from = new Coordinate(fromQ, fromR);
-        Field field = board.get(from); // retrieve the field from the board
-        if (field == null) {
-            throw new IllegalMove("There is no Tile on this coordinate!");
+        Field field = board.get(new Coordinate(fromQ, fromR)); // retrieve the field from the board
+        Tile upperTile = field.peek();
+        if (upperTile == null || upperTile.getColor() != currentPlayer) {
+            throw new IllegalMove(String.format("There is no Tile on coordinate: (%d,%d), with color: %s", fromQ, fromR, currentPlayer));
         }
-        board.remove(from); // delete field from the board
-        board.put(new Coordinate(toQ, toR), field); // move the field to new position
+        upperTile = field.getUpperTile(); // delete top tile from the board
+        place(upperTile, toQ, toR); // move the field to new position
+        switchPlayer();
+    }
+
+    private void switchPlayer() {
         currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
     }
 
     @Override
     public void pass() throws IllegalMove {
-        currentPlayer = (currentPlayer == Player.WHITE) ? Player.BLACK : Player.WHITE;
+        switchPlayer();
+    }
+
+    public void place(TileType tileType, int q, int r) {
+        Field field = board.get(new Coordinate(q, r));
+        if (field == null) {
+            board.put(new Coordinate(q, r), new Field(new Tile(currentPlayer, tileType)));
+        } else {
+            field.addTile(new Tile(currentPlayer, tileType));
+        }
+    }
+
+    public void place(Tile tile, int q, int r) {
+        Field field = board.get(new Coordinate(q, r));
+        if (field == null) {
+            board.put(new Coordinate(q, r), new Field(tile));
+        } else {
+            field.addTile(tile);
+        }
     }
 
     /**
@@ -108,7 +125,6 @@ public class HiveGame implements Hive {
                 }
             }
         }
-
         return true;
     }
 

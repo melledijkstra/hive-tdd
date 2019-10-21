@@ -42,7 +42,7 @@ class BoardTest {
     @Test
     void testIfTilesCanBeMoved() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
-        game.play(Hive.TileType.QUEEN_BEE, 0, 0);
+        game.place(Hive.TileType.QUEEN_BEE, 0, 0);
         // assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(0, 0)).getType());
         game.move(0, 0, 10, 10);
         assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(10, 10)).peek().getType());
@@ -54,9 +54,9 @@ class BoardTest {
     void testIfStonesAreAbleToStackOnTopOfEachOther() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
         // put a stone on a spot
-        game.play(Hive.TileType.QUEEN_BEE, 0, 0);
+        game.place(Hive.TileType.QUEEN_BEE, 0, 0);
         // put another stone on the same spot
-        game.play(Hive.TileType.SPIDER, 0, 0);
+        game.place(Hive.TileType.SPIDER, 0, 0);
         assertEquals(2, game.getBoard().get(new Coordinate(0,0)).getTiles().size());
     }
 
@@ -64,9 +64,9 @@ class BoardTest {
     void testIfTopTileOfStackCanBeMoved() throws Hive.IllegalMove {
         // we just need the beginning of the previous test? how could we do that at once?
         HiveGame game = new HiveGame();
-        game.play(Hive.TileType.QUEEN_BEE, 0, 0);
-        game.play(Hive.TileType.SPIDER, 0, 0);
-        game.play(Hive.TileType.SOLDIER_ANT, 0, 0);
+        game.place(Hive.TileType.QUEEN_BEE, 0, 0);
+        game.place(Hive.TileType.SPIDER, 0, 0);
+        game.place(Hive.TileType.SOLDIER_ANT, 0, 0);
         // move the top tile
         game.move(0, 0, 1, 1);
         assertEquals(Hive.TileType.SOLDIER_ANT, game.getBoard().get(new Coordinate(1, 1)).peek().getType());

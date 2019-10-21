@@ -29,4 +29,8 @@ class Field {
         }
         return false;
     }
+
+    public Tile getUpperTile() {
+        return tiles.pop();
+    }
 }
