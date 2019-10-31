@@ -18,6 +18,7 @@ public class HiveGame implements Hive {
     @Override
     public void play(TileType tileType, int q, int r) throws IllegalMove {
         if (isValidPlay(tileType, q, r)) {
+            // removeFromInventory(tileType, currentPlayer);
             place(tileType, q, r);
             switchPlayer();
         }
