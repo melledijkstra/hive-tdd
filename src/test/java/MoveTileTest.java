@@ -1,6 +1,16 @@
 import org.junit.jupiter.api.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 public class MoveTileTest {
 
     /*
@@ -11,22 +21,28 @@ public class MoveTileTest {
     @Test
     void testIfPlayerCanOnlyMoveTheirOwnPlayedTiles() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
-        game.place(Hive.TileType.QUEEN_BEE, 0 ,0);
-        game.place(Hive.TileType.SPIDER, 1 ,0);
+        game.place(Hive.TileType.QUEEN_BEE, 0, 0);
+        game.place(Hive.TileType.SPIDER, 1, 0);
         game.move(0, 0, 2, 0);
     }
 
     // b. Een speler mag pas stenen verplaatsen als zijn bijenkoningin gespeeld is.
     @Test
-    void testIfPlayerCanOnlyMoveTilesWhenHisQueenHasBeenPlayed() {
-        // throwing exception to show that it fails, because not implemented yet!
-        throw new NotImplementedException();
+    void testIfPlayerCanOnlyMoveTilesWhenHisQueenHasBeenPlayed() throws Hive.IllegalMove {
+        HiveGame game = new HiveGame();
+        game.play(Hive.TileType.BEETLE, 0, 0); // w
+        game.play(Hive.TileType.BEETLE, 1, 0); // b
+        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 0, 2, 0), "Play bee first before moving");
     }
 
     // c. Een steen moet na het verplaatsen in contact zijn met minstens één andere steen.
     @Test
     void testThatMovedTilesAreAlwaysInContactWithAtLeastOneOtherStone() {
-        throw new NotImplementedException();
+        HiveGame game = spy(HiveGame.class);
+        game.place(new Tile(Hive.Player.WHITE, Hive.TileType.QUEEN_BEE), 0, 0);
+        game.place(new Tile(Hive.Player.BLACK, Hive.TileType.BEETLE), 1, 0);
+        game.place(new Tile(Hive.Player.WHITE, Hive.TileType.GRASSHOPPER), -1, 0);
+        assertThrows(Hive.IllegalMove.class, () -> game.move(-1, 0, -5, -5));
     }
 
     // d. Een steen mag niet verplaatst worden als er door het weghalen van de steen twee niet onderling

@@ -9,6 +9,10 @@ class Field {
         tiles.push(tile);
     }
 
+    Field(Stack<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
     public Stack<Tile> getTiles() {
         return tiles;
     }
