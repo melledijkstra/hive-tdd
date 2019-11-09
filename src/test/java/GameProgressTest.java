@@ -26,16 +26,14 @@ public class GameProgressTest {
     void testThatPlayerChanges() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
-        game.play(Hive.TileType.QUEEN_BEE, 0, 0);
+        game.play(Hive.TileType.QUEEN_BEE, 0, 0); // w
         assertEquals(Hive.Player.BLACK, game.getCurrentPlayer());
-        game.play(Hive.TileType.SPIDER, 1, 1);
+        game.play(Hive.TileType.QUEEN_BEE, 1, 0); // b
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
-        game.pass();
+        game.pass(); // w
         assertEquals(Hive.Player.BLACK, game.getCurrentPlayer());
-        game.move(1, 1, 2, 1);
+        game.move(1, 0, 0, 1); // b
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
-
-        // todo: HOW CAN WE WRITE THIS TEST BETTER?
     }
 
     // c. Een speler wint als alle zes velden naast de bijenkoningin van de tegenstander bezet zijn.

@@ -15,7 +15,7 @@ class GameInstancesTest {
         HiveGame game = new HiveGame();
         game.play(Hive.TileType.QUEEN_BEE, startQ, startR); // w
         game.play(Hive.TileType.SOLDIER_ANT, startQ + 1, startR); // b
-        game.play(Hive.TileType.SPIDER, startQ, startR + 1); // w
+        game.play(Hive.TileType.SPIDER, startQ - 1, startR + 1); // w
     }
 
     @Test
@@ -35,6 +35,21 @@ class GameInstancesTest {
 
     @Test
     void testInstance1() {
+
+    }
+
+    @Test
+    void testInstanceWithMinusLocationNumbers() {
+
+    }
+
+    @Test
+    void testInstanceWhereToGroupsWillExist() {
+
+    }
+
+    @Test
+    void testInstanceWhereAntTriesToFillAGapInTheHive() {
 
     }
 

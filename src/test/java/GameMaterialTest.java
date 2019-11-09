@@ -12,12 +12,8 @@ public class GameMaterialTest {
      */
 
     // a. Hive wordt gespeeld met zeshoekige stenen in de kleuren wit en zwart, die corresponderen met de twee spelers.
-
-    /**
-     * this test is partly covered by
-     *
-     * @see BoardTest#testIfCoordinatesContainNeighbours
-     */
+    // ^^ this test is partly covered by
+    // @see BoardTest#testIfCoordinatesContainNeighbours
 
 
     @Test

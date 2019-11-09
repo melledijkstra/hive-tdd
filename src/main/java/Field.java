@@ -13,6 +13,10 @@ class Field {
         this.tiles = tiles;
     }
 
+    Field() {
+        this.tiles = new Stack<>();
+    }
+
     public Stack<Tile> getTiles() {
         return tiles;
     }
@@ -34,7 +38,8 @@ class Field {
         return false;
     }
 
-    public Tile getUpperTile() {
+    public Tile removeUpperTile() {
         return tiles.pop();
     }
+
 }
