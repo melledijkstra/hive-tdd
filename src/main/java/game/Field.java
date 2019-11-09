@@ -11,11 +11,11 @@ public class Field {
         tiles.push(tile);
     }
 
-    Field(Stack<Tile> tiles) {
+    public Field(Stack<Tile> tiles) {
         this.tiles = tiles;
     }
 
-    Field() {
+    public Field() {
         this.tiles = new Stack<>();
     }
 

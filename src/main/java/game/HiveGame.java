@@ -31,6 +31,11 @@ public class HiveGame implements Hive {
         turn = 1;
     }
 
+    public HiveGame(Board board) {
+        super();
+        this.board = board;
+    }
+
     private void distributeTilesToPlayers() {
         for (Player p : new Player[]{Player.WHITE, Player.BLACK}) {
             playerTiles.put(p, new HashMap<TileType, Integer>() {{

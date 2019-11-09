@@ -2,7 +2,8 @@ import game.Hive;
 import game.HiveGame;
 import game.Tile;
 import org.junit.jupiter.api.Test;
-
+import strategy.MoveStrategy;
+import strategy.MoveStrategyFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
@@ -79,15 +80,11 @@ public class MoveTileTest {
     // e. Elk van de types stenen heeft zijn eigen manier van verplaatsen.
     @Test
     void testIfEveryTileHasTheirOwnStrategyOfMoving() {
-        // todo: fix this by using interfaces and creating special Move classes that implement the interface move
-        // strategy.MoveStrategy, this move strategy is then used per tile. A factory could assign a strategy to a tile
-
-        // game.Tile t = new game.Tile(TileType.QUEEN_BEE, new QueenBeeMoveStrategy());
-        // ...
-        // t.getStrategy().move() ???
-
-        // something like this?
-
+        MoveStrategyFactory factory = new MoveStrategyFactory();
+        MoveStrategy strategy1 = factory.createMoveStrategy(Hive.TileType.QUEEN_BEE);
+        MoveStrategy strategy2 = factory.createMoveStrategy(Hive.TileType.SOLDIER_ANT);
+        assertNotEquals(strategy1, strategy2);
+        assertNotSame(strategy1, strategy2);
     }
 
 }
