@@ -1,3 +1,4 @@
+import game.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -40,11 +41,11 @@ public class GameProgressTest {
     @Test
     void testIfPlayerWinsWhenThereAreSixOppositeTilesAtEnemiesQueen() {
         // mock the tiles on the board, then check if win gives back true in certain situations
-        HiveGame game = spy(HiveGame.class);
-        when(game.getBoard()).thenReturn(generateWinBoard(Hive.Player.BLACK));
+        HiveGame game = new HiveGame();
+        Board board = spy(Board.class);
+        when(board.getPlayField()).thenReturn(generateWinBoard(Hive.Player.BLACK));
+        game.setBoard(board);
         assertTrue(game.isWinner(Hive.Player.WHITE));
-
-        // todo: isWinner not has to call `getBoard()` instead of `this.board` otherwise test will fail, how to fix this?
     }
 
     /**
@@ -75,8 +76,10 @@ public class GameProgressTest {
     // d. Als beide spelers tegelijk zouden winnen is het in plaats daarvan een gelijkspel.
     @Test
     void testIfItsADrawWhenBothPlayersWouldWin() {
-        HiveGame game = spy(HiveGame.class);
-        when(game.getBoard()).thenReturn(generateTiedBoard());
+        HiveGame game = new HiveGame();
+        Board board = spy(Board.class);
+        when(board.getPlayField()).thenReturn(generateTiedBoard());
+        game.setBoard(board);
         assertTrue(game.isDraw());
     }
 

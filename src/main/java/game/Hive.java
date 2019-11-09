@@ -1,5 +1,7 @@
+package game;
+
 /**
- * Hive game.
+ * game.Hive game.
  */
 public interface Hive {
     /**

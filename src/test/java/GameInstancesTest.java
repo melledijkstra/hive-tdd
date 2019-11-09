@@ -1,3 +1,5 @@
+import game.Hive;
+import game.HiveGame;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

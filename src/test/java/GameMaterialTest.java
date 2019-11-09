@@ -1,3 +1,6 @@
+import game.Hive;
+import game.HiveGame;
+import game.Tile;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -11,7 +14,7 @@ public class GameMaterialTest {
      * 1. Spelmateriaal
      */
 
-    // a. Hive wordt gespeeld met zeshoekige stenen in de kleuren wit en zwart, die corresponderen met de twee spelers.
+    // a. game.Hive wordt gespeeld met zeshoekige stenen in de kleuren wit en zwart, die corresponderen met de twee spelers.
     // ^^ this test is partly covered by
     // @see BoardTest#testIfCoordinatesContainNeighbours
 

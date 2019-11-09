@@ -1,3 +1,6 @@
+import game.Coordinate;
+import game.Hive;
+import game.HiveGame;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ class BoardTest {
     @Test
     void testIfBoardAtStartOfGameIsEmpty() {
         HiveGame game = new HiveGame();
-        assertEquals(0, game.getBoard().size());
+        assertEquals(0, game.getPlayField().size());
     }
 
     // d. Stenen mogen alleen precies in een vlak liggen.
@@ -45,7 +48,7 @@ class BoardTest {
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0); // w
         game.placeFromInventory(Hive.TileType.SPIDER, 1, 0); // w
         game.move(0, 0, 1, -1); // w
-        assertEquals(Hive.TileType.QUEEN_BEE, game.getBoard().get(new Coordinate(1, -1)).peek().getType());
+        assertEquals(Hive.TileType.QUEEN_BEE, game.getPlayField().get(new Coordinate(1, -1)).peek().getType());
     }
 
     // f. In sommige gevallen mogen stenen op andere stenen liggen; in dat geval mag alleen de bovenste steen van
@@ -57,7 +60,7 @@ class BoardTest {
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0);
         // put another stone on the same spot
         game.placeFromInventory(Hive.TileType.SPIDER, 0, 0);
-        assertEquals(2, game.getBoard().get(new Coordinate(0,0)).getTiles().size());
+        assertEquals(2, game.getPlayField().get(new Coordinate(0,0)).getTiles().size());
     }
 
     @Test
@@ -69,7 +72,7 @@ class BoardTest {
         game.placeFromInventory(Hive.TileType.SOLDIER_ANT, 0, 0); // w
         // move the top tile
         game.move(0, 0, -1, 1); // w
-        assertEquals(Hive.TileType.SOLDIER_ANT, game.getBoard().get(new Coordinate(-1, 1)).peek().getType());
+        assertEquals(Hive.TileType.SOLDIER_ANT, game.getPlayField().get(new Coordinate(-1, 1)).peek().getType());
     }
 
     @Test
@@ -77,9 +80,9 @@ class BoardTest {
         HiveGame game = new HiveGame();
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0);
         game.placeFromInventory(Hive.TileType.BEETLE, 1, 0);
-        assertEquals(2, game.getBoard().size());
-        assertEquals(1, game.getBoard().get(new Coordinate(0, 0)).getTiles().size());
-        assertEquals(1, game.getBoard().get(new Coordinate(1, 0)).getTiles().size());
+        assertEquals(2, game.getPlayField().size());
+        assertEquals(1, game.getPlayField().get(new Coordinate(0, 0)).getTiles().size());
+        assertEquals(1, game.getPlayField().get(new Coordinate(1, 0)).getTiles().size());
     }
 
 }

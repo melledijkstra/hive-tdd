@@ -1,5 +1,7 @@
+import game.Hive;
+import game.HiveGame;
+import game.Tile;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,23 +71,23 @@ public class MoveTileTest {
         game.move(-1, 0, 2, -1); // w  // white ant next to in between black bee and ant
         game.move(2, 0, -1, 1); // b  // black ant next to in between white bee and ant
 
-        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 0, 3, -1), "Move invalid, otherwise Hive would split"); // w
+        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 0, 3, -1), "Move invalid, otherwise game.Hive would split"); // w
         game.setCurrentPlayer(Hive.Player.BLACK); // switch to black
-        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 1, -2, 1), "Move invalid, otherwise Hive would split"); // b
+        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 1, -2, 1), "Move invalid, otherwise game.Hive would split"); // b
     }
 
     // e. Elk van de types stenen heeft zijn eigen manier van verplaatsen.
     @Test
     void testIfEveryTileHasTheirOwnStrategyOfMoving() {
         // todo: fix this by using interfaces and creating special Move classes that implement the interface move
-        // MoveStrategy, this move strategy is then used per tile. A factory could assign a strategy to a tile
+        // strategy.MoveStrategy, this move strategy is then used per tile. A factory could assign a strategy to a tile
 
-        // Tile t = new Tile(TileType.QUEEN_BEE, new QueenBeeMoveStrategy());
+        // game.Tile t = new game.Tile(TileType.QUEEN_BEE, new QueenBeeMoveStrategy());
         // ...
         // t.getStrategy().move() ???
 
         // something like this?
-        throw new NotImplementedException();
+
     }
 
 }

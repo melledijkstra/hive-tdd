@@ -1,3 +1,5 @@
+import game.Hive;
+import game.HiveGame;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -34,11 +36,11 @@ public class PlayTileTest {
     // b. Een speler speelt een steen door deze op een leeg vlak in het speelveld te leggen.
     // this test goes against the principle that tiles can be stacked? a player can play on a field where tiles exist
     //    @Test
-    //    void testIfPlayCanOnlyBeDoneOnEmptyFields() throws Hive.IllegalMove {
-    //        HiveGame game = new HiveGame();
-    //        game.play(Hive.TileType.QUEEN_BEE, 0, 0); // w
-    //        game.play(Hive.TileType.SPIDER, 0, 1); // b
-    //        assertThrows(Hive.IllegalMove.class, () -> game.play(Hive.TileType.SPIDER, 0, 0)); // w
+    //    void testIfPlayCanOnlyBeDoneOnEmptyFields() throws game.Hive.IllegalMove {
+    //        game.HiveGame game = new game.HiveGame();
+    //        game.play(game.Hive.TileType.QUEEN_BEE, 0, 0); // w
+    //        game.play(game.Hive.TileType.SPIDER, 0, 1); // b
+    //        assertThrows(game.Hive.IllegalMove.class, () -> game.play(game.Hive.TileType.SPIDER, 0, 0)); // w
     //    }
 
     // c. Als er al stenen op het bord liggen moet er naast een andere steen gespeeld worden

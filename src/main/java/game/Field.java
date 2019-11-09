@@ -1,10 +1,12 @@
+package game;
+
 import java.util.Stack;
 
-class Field {
+public class Field {
 
     private Stack<Tile> tiles;
 
-    Field(Tile tile) {
+    public Field(Tile tile) {
         tiles = new Stack<>();
         tiles.push(tile);
     }
@@ -25,8 +27,8 @@ class Field {
         tiles.push(tile);
     }
 
-    Tile peek() {
-        return tiles.peek();
+    public Tile peek() {
+        return !tiles.isEmpty() ? tiles.peek() : null;
     }
 
     boolean contains(Hive.TileType tileType) {
