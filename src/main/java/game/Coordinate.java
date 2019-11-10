@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Coordinate {
 
-    private int q, r;
+    public int q, r;
 
     public Coordinate(int q, int r) {
         this.q = q;
@@ -43,5 +43,16 @@ public class Coordinate {
             add(new Coordinate(q, r - 1));
             add(new Coordinate(q + 1, r - 1));
         }};
+    }
+
+    public boolean isNeighbour(Coordinate coordinate) {
+        return this.getNeighbours().contains(coordinate);
+    }
+
+    public ArrayList<Coordinate> getCommonNeighbours(Coordinate b) {
+        // todo: make this a bit faster? Is there a mathematical formula to calculate the common neighbours in hexagon?
+        ArrayList<Coordinate> neighbours = getNeighbours(); // get current neighbours
+        neighbours.retainAll(b.getNeighbours()); // keep all the neighbours that are the same as neighbours from b
+        return neighbours;
     }
 }

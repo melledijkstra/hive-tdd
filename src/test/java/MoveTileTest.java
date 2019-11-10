@@ -20,7 +20,7 @@ public class MoveTileTest {
         HiveGame game = new HiveGame();
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0); // w
         game.placeFromInventory(Hive.TileType.SPIDER, 1, 0); // w
-        game.move(0, 0, 2, 0); // w
+        game.move(0, 0, 1, -1); // w
     }
 
     @Test
@@ -43,9 +43,9 @@ public class MoveTileTest {
     @Test
     void testIfPlayerCanMoveTilesWhenHisQueenHasBeenPlayed() throws Hive.IllegalMove {
         HiveGame game = new HiveGame();
-        game.play(Hive.TileType.QUEEN_BEE, 0, 0); // w
-        game.play(Hive.TileType.BEETLE, 1, 0); // b
-        assertDoesNotThrow(() -> game.move(0, 0, 2, 0)); // w
+        game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0); // w
+        game.placeFromInventory(Hive.TileType.BEETLE, 1, 0); // w
+        assertDoesNotThrow(() -> game.move(1, 0, 0, 1)); // w
     }
 
     // c. Een steen moet na het verplaatsen in contact zijn met minstens één andere steen.

@@ -31,9 +31,9 @@ public class GameProgressTest {
         assertEquals(Hive.Player.BLACK, game.getCurrentPlayer());
         game.play(Hive.TileType.QUEEN_BEE, 1, 0); // b
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
-        game.pass(); // w
+        game.move(0, 0, 0, 1); // w
         assertEquals(Hive.Player.BLACK, game.getCurrentPlayer());
-        game.move(1, 0, 0, 1); // b
+        game.move(1, 0, 0, 0); // b
         assertEquals(Hive.Player.WHITE, game.getCurrentPlayer());
     }
 

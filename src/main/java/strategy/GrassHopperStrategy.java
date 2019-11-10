@@ -1,14 +1,21 @@
 package strategy;
 
 import game.Board;
+import game.Coordinate;
 import game.Hive;
-import game.Tile;
+
+import java.util.ArrayList;
 
 public class GrassHopperStrategy implements MoveStrategy {
 
     @Override
-    public void move(Board board, Tile tile, int fromQ, int fromR, int toQ, int toR) throws Hive.IllegalMove {
-        board.place(tile, toQ, toR);
+    public boolean canMove(Board board, Coordinate from, Coordinate to) throws Hive.IllegalMove {
+        return true;
+    }
+
+    @Override
+    public ArrayList<Coordinate> availableMoves(Board board, Hive.Player player, int fromQ, int fromR) {
+        return null;
     }
 
 }

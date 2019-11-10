@@ -1,6 +1,10 @@
 package game;
 
+import strategy.MoveStrategyFactory;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
 
@@ -21,6 +25,45 @@ public class Board {
         } else {
             field.addTile(tile);
         }
+    }
+
+    public HashMap<Coordinate, ArrayList<Coordinate>> getPossiblePlaysAndMoves(Hive.Player player) {
+        // this stores all the possible moves from the positions given as key
+        HashMap<Coordinate, ArrayList<Coordinate>> possibleMoves = new HashMap<>();
+        MoveStrategyFactory strategyFactory = new MoveStrategyFactory();
+        for (Map.Entry<Coordinate, Field> entry : getPlayField().entrySet()) { // loop through all the fields on the board
+            Tile upperTile = entry.getValue().peek();
+            if (upperTile != null && upperTile.getColor() == player) { // check if there is a tile on the this field
+                Coordinate from = entry.getKey();
+                ArrayList<Coordinate> moves = strategyFactory
+                        .createMoveStrategy(upperTile.getType())
+                        .availableMoves(this, player, from.q, from.r); // get all the moves from this position with this strategy
+                if (!moves.isEmpty()) {
+                    possibleMoves.put(from, moves);
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    /**
+     * Check if a position has neighbours
+     */
+    public boolean positionHasNeighbours(Coordinate position) {
+        HashMap<Coordinate, Field> board = getPlayField();
+        boolean hasNeighbours = false;
+        for (Coordinate neighbour : position.getNeighbours()) {
+            Field nbrField = board.get(neighbour);
+            if (nbrField != null && !nbrField.getTiles().isEmpty()) { // if field exists and tiles exist, he has a neighbour
+                hasNeighbours = true;
+                break;
+            }
+        }
+        return hasNeighbours;
+    }
+
+    public boolean positionHasNeighbours(int q, int r) {
+        return positionHasNeighbours(new Coordinate(q, r));
     }
 
 }

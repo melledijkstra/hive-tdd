@@ -60,7 +60,7 @@ public class HiveGame implements Hive {
                 throw new IllegalMove("Play queen bee at least in 4 turns");
             }
         }
-        if (turn > 1 && !positionHasNeighbours(q, r)) {
+        if (turn > 1 && !board.positionHasNeighbours(q, r)) {
             throw new IllegalMove("Tiles must be placed next to other tiles");
         }
         if (turn > 2 && touchesOpponent(currentPlayer, q, r)) {
@@ -86,34 +86,37 @@ public class HiveGame implements Hive {
 
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
-        Field field = board.getPlayField().get(new Coordinate(fromQ, fromR)); // retrieve the field from the board
+        Coordinate from = new Coordinate(fromQ, fromR);
+        Field field = board.getPlayField().get(from); // retrieve the field from the board
         Tile upperTile = field != null ? field.peek() : null;
         if (upperTile == null || upperTile.getColor() != currentPlayer) {
-            throw new IllegalMove(String.format("There is no tile on coordinate: (%d,%d), with color: %s", fromQ, fromR, currentPlayer));
+            throw new IllegalMove(String.format("Top tile on coordinate: (%d,%d) is not of player: %s", fromQ, fromR, currentPlayer));
         }
         if (getPlayerTiles(currentPlayer).get(TileType.QUEEN_BEE) == 1) {
             throw new IllegalMove("Play bee first before moving");
         }
         // check if hive would split
-        if (hiveWouldSplit(fromQ, fromR)) {
+        if (hiveWouldSplit(from)) {
             throw new IllegalMove("Invalid move, the hive would split");
         }
         upperTile = field.removeUpperTile(); // delete top tile from the board
-        if (!positionHasNeighbours(new Coordinate(toQ, toR))) {
+        if (!board.positionHasNeighbours(new Coordinate(toQ, toR))) {
             field.addTile(upperTile); // put tile back on the old position
             throw new IllegalMove("Tile not in contact with another stone");
         }
         MoveStrategy strategy = strategyFactory.createMoveStrategy(upperTile.getType());
-        strategy.move(board, upperTile, fromQ, fromR, toQ, toR);
+        if (strategy.canMove(board, new Coordinate(fromQ, fromR), new Coordinate(toQ, toR))) {
+            board.place(upperTile, toQ, toR);
+        }
         switchPlayer();
     }
 
-    private boolean hiveWouldSplit(int q, int r) {
+    private boolean hiveWouldSplit(Coordinate from) {
         // hive is divided when the neighbours after movement are not all connected
         HashMap<Coordinate, Field> board = this.board.getPlayField();
         int actualNeighbours = 0; // the actual amount of neighbours the removed tile has
         int connections = 0; // the amount of connections between neighbours when looping through them
-        ArrayList<Coordinate> neighbours = new Coordinate(q, r).getNeighbours();
+        ArrayList<Coordinate> neighbours = from.getNeighbours();
         // set to true if last element of neighbours has tile, otherwise this connection would not be included
         Field lastNeighbour = board.get(neighbours.get(neighbours.size() - 1));
         boolean previousHadTile = lastNeighbour != null && lastNeighbour.peek() != null;
@@ -134,27 +137,19 @@ public class HiveGame implements Hive {
 
     @Override
     public void pass() throws IllegalMove {
+        if (playerHasTilesInInventory(currentPlayer) || board.getPossiblePlaysAndMoves(currentPlayer).size() > 0) {
+            throw new IllegalMove("Player cannot pass when there are moves or tiles to play");
+        }
         switchPlayer();
     }
 
-    /**
-     * Check if a position has neighbours
-     */
-    private boolean positionHasNeighbours(Coordinate position) {
-        HashMap<Coordinate, Field> board = this.board.getPlayField();
-        boolean hasNeighbours = false;
-        for (Coordinate neighbour : position.getNeighbours()) {
-            Field nbrField = board.get(neighbour);
-            if (nbrField != null && !nbrField.getTiles().isEmpty()) { // if field exists and tiles exist, he has a neighbour
-                hasNeighbours = true;
-                break;
+    private boolean playerHasTilesInInventory(Player player) {
+        for (int amount : getPlayerTiles(player).values()) {
+            if (amount > 0) {
+                return true;
             }
         }
-        return hasNeighbours;
-    }
-
-    private boolean positionHasNeighbours(int q, int r) {
-        return positionHasNeighbours(new Coordinate(q, r));
+        return false;
     }
 
     private void switchPlayer() {
@@ -179,7 +174,8 @@ public class HiveGame implements Hive {
         Player loser = (player == Player.WHITE) ? Player.BLACK : Player.WHITE;
         for (Map.Entry<Coordinate, Field> entry : board.getPlayField().entrySet()) {
             Field field = entry.getValue();
-            if (field.peek().getColor() != loser) { // todo: needs refactor
+            // todo: needs refactor, correct color checking
+            if (field.peek().getColor() != loser) {
                 continue;
             }
             if (field.contains(TileType.QUEEN_BEE)) {
@@ -196,10 +192,11 @@ public class HiveGame implements Hive {
 
     @Override
     public boolean isDraw() {
-        if (getPlayField().size() < 10) {
+        if (board.getPlayField().size() < 10) {
             return false;
         }
 
+        // todo: color should be considered in checking!
         for (Coordinate key : board.getPlayField().keySet()) {
             Field field = board.getPlayField().get(key);
             if (field.contains(TileType.QUEEN_BEE)) {
@@ -237,4 +234,5 @@ public class HiveGame implements Hive {
     public void setBoard(Board board) {
         this.board = board;
     }
+
 }

@@ -1,3 +1,4 @@
+import game.Board;
 import game.Coordinate;
 import game.Hive;
 import game.HiveGame;
@@ -31,6 +32,43 @@ class BoardTest {
         assertEquals(10, coordinates[1]);
     }
 
+    @Test
+    void testIfCoordinatesHaveCommonNeighbours() {
+        Coordinate a = new Coordinate(0, 0);
+        Coordinate b = new Coordinate(0, 1);
+        assertEquals(2, a.getCommonNeighbours(b).size());
+    }
+
+    @Test
+    void testIfCoordinatesDontHaveCommonNeighbours() {
+        Coordinate a = new Coordinate(0, 0);
+        Coordinate b = new Coordinate(1, 2);
+        assertEquals(0, a.getCommonNeighbours(b).size());
+    }
+
+    @Test
+    void testIfTwoNeighboursAreActuallyNeighbours() {
+        Coordinate center = new Coordinate(0, 0);
+        ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>() {{
+            add(new Coordinate(0, -1));
+            add(new Coordinate(1, -1));
+            add(new Coordinate(1, 0));
+            add(new Coordinate(0, 1));
+            add(new Coordinate(-1, 1));
+            add(new Coordinate(-1, 0));
+        }};
+        for (Coordinate nbrs : coordinates) {
+            assertTrue(center.isNeighbour(nbrs));
+        }
+    }
+
+    @Test
+    void testIfTwoCoordinatesAreNotNeighbours() {
+        Coordinate a = new Coordinate(0, 0);
+        Coordinate b = new Coordinate(0, 1);
+        assertEquals(2, a.getCommonNeighbours(b).size());
+    }
+
     // c. Aan het begin van het spel is het speelveld leeg.
     @Test
     void testIfBoardAtStartOfGameIsEmpty() {
@@ -60,7 +98,7 @@ class BoardTest {
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0);
         // put another stone on the same spot
         game.placeFromInventory(Hive.TileType.SPIDER, 0, 0);
-        assertEquals(2, game.getPlayField().get(new Coordinate(0,0)).getTiles().size());
+        assertEquals(2, game.getPlayField().get(new Coordinate(0, 0)).getTiles().size());
     }
 
     @Test
@@ -83,6 +121,12 @@ class BoardTest {
         assertEquals(2, game.getPlayField().size());
         assertEquals(1, game.getPlayField().get(new Coordinate(0, 0)).getTiles().size());
         assertEquals(1, game.getPlayField().get(new Coordinate(1, 0)).getTiles().size());
+    }
+
+    @Test
+    void testIfBoardIsAbleToGeneratePossibleMovesForAllTheTiles() {
+        Board board = new Board();
+
     }
 
 }
