@@ -107,8 +107,8 @@ public class HiveGame implements Hive {
         MoveStrategy strategy = strategyFactory.createMoveStrategy(upperTile.getType());
         if (strategy.canMove(board, new Coordinate(fromQ, fromR), new Coordinate(toQ, toR))) {
             board.place(upperTile, toQ, toR);
+            switchPlayer();
         }
-        switchPlayer();
     }
 
     private boolean hiveWouldSplit(Coordinate from) {

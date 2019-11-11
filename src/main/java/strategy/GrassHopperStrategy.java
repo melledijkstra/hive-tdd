@@ -10,6 +10,7 @@ public class GrassHopperStrategy implements MoveStrategy {
 
     @Override
     public boolean canMove(Board board, Coordinate from, Coordinate to) throws Hive.IllegalMove {
+        // can only jump straight
         return true;
     }
 

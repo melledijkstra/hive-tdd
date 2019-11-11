@@ -86,7 +86,7 @@ public class MoveStrategyTest {
      * 9. Verplaatsen van een soldatenmier
      */
     // a. Een soldatenmier verplaatst zich door een onbeperkt aantal keren te verschuiven.
-    // todo: hoe dit te testen?
+    // todo: hoe dit te testen
 //    @Test
 //    void testUnlimitedMovesForSoldierAntStrategy() {
 //        Board board = spy(Board.class);
