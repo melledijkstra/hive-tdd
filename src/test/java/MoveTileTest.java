@@ -65,14 +65,13 @@ public class MoveTileTest {
         HiveGame game = new HiveGame();
         // play pieces
         game.play(Hive.TileType.QUEEN_BEE, 0, 0); // w  // white bee in the middle
-        game.play(Hive.TileType.QUEEN_BEE, 1, 0); // b  // black bee on top of white bee
-        game.play(Hive.TileType.SOLDIER_ANT, -1, 0); // w  // white ant below white bee
-        game.play(Hive.TileType.SOLDIER_ANT, 2, 0); // b  // black ant above black bee
+        game.play(Hive.TileType.QUEEN_BEE, 1, 0); // b  // black bee right of white bee
+        game.play(Hive.TileType.SOLDIER_ANT, -1, 0); // w  // white ant left of white bee
+        game.play(Hive.TileType.SOLDIER_ANT, 2, 0); // b  // black ant right of black bee
         // move pieces
         game.move(-1, 0, 2, -1); // w  // white ant next to in between black bee and ant
         game.move(2, 0, -1, 1); // b  // black ant next to in between white bee and ant
 
-        assertThrows(Hive.IllegalMove.class, () -> game.move(0, 0, 3, -1), "Move invalid, otherwise game.Hive would split"); // w
         game.setCurrentPlayer(Hive.Player.BLACK); // switch to black
         assertThrows(Hive.IllegalMove.class, () -> game.move(0, 1, -2, 1), "Move invalid, otherwise game.Hive would split"); // b
     }

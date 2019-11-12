@@ -21,11 +21,9 @@ public interface MoveStrategy {
     /**
      * Generate the amount of moves a player can make with this strategy
      * @param board The current state of the board
-     * @param player The player to make the move
-     * @param fromQ The Q from position
-     * @param fromR The R from position
+     * @param from The coordinate from which this strategy has to find moves
      * @return The coordinates of all the places where the player can make a move to
      */
-    ArrayList<Coordinate> availableMoves(Board board, Hive.Player player, int fromQ, int fromR);
+    ArrayList<Coordinate> availableMoves(Board board, Coordinate from);
 
 }

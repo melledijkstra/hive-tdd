@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -39,13 +40,22 @@ public class GameProgressTest {
 
     // c. Een speler wint als alle zes velden naast de bijenkoningin van de tegenstander bezet zijn.
     @Test
-    void testIfPlayerWinsWhenThereAreSixOppositeTilesAtEnemiesQueen() {
+    void testIfWhitePlayerWinsWhenThereAreSixOppositeTilesAtBlackQueen() {
         // mock the tiles on the board, then check if win gives back true in certain situations
-        HiveGame game = new HiveGame();
         Board board = spy(Board.class);
+        HiveGame game = new HiveGame(board);
         when(board.getPlayField()).thenReturn(generateWinBoard(Hive.Player.BLACK));
-        game.setBoard(board);
         assertTrue(game.isWinner(Hive.Player.WHITE));
+    }
+
+    // c. Een speler wint als alle zes velden naast de bijenkoningin van de tegenstander bezet zijn.
+    @Test
+    void testIfBlackPlayerWinsWhenThereAreSixOppositeTilesAtWhiteQueen() {
+        // mock the tiles on the board, then check if win gives back true in certain situations
+        Board board = spy(Board.class);
+        HiveGame game = new HiveGame(board);
+        when(board.getPlayField()).thenReturn(generateWinBoard(Hive.Player.WHITE));
+        assertTrue(game.isWinner(Hive.Player.BLACK));
     }
 
     /**

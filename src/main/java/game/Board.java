@@ -28,16 +28,17 @@ public class Board {
     }
 
     public HashMap<Coordinate, ArrayList<Coordinate>> getPossiblePlaysAndMoves(Hive.Player player) {
-        // this stores all the possible moves from the positions given as key
+        // this stores all the possible moves, key is from coordinate, the arraylist is filled with coordinates to play to from this coordinate
         HashMap<Coordinate, ArrayList<Coordinate>> possibleMoves = new HashMap<>();
         MoveStrategyFactory strategyFactory = new MoveStrategyFactory();
         for (Map.Entry<Coordinate, Field> entry : getPlayField().entrySet()) { // loop through all the fields on the board
             Tile upperTile = entry.getValue().peek();
-            if (upperTile != null && upperTile.getColor() == player) { // check if there is a tile on the this field
+            if (upperTile != null && // only upperTile can be played
+                    upperTile.getColor() == player) { // check if there is a tile on this field from this player
                 Coordinate from = entry.getKey();
                 ArrayList<Coordinate> moves = strategyFactory
                         .createMoveStrategy(upperTile.getType())
-                        .availableMoves(this, player, from.q, from.r); // get all the moves from this position with this strategy
+                        .availableMoves(this, from); // get all the moves from this position with this strategy
                 if (!moves.isEmpty()) {
                     possibleMoves.put(from, moves);
                 }
@@ -66,4 +67,22 @@ public class Board {
         return positionHasNeighbours(new Coordinate(q, r));
     }
 
+    public boolean isOccupied(Coordinate coordinate) {
+        // the field is occupied when it exists and it has a least one tile
+        return getPlayField().get(coordinate) != null && !getPlayField().get(coordinate).getTiles().isEmpty();
+    }
+
+    public boolean canPlace(Hive.Player currentPlayer) {
+        if (getPlayField().isEmpty()) { // first play move is always allowed on empty board
+            return true;
+        }
+        for (Field field : getPlayField().values()) {
+            if (field.peek() != null && // check if there is a tile on this field
+                    field.peek().getColor() == currentPlayer // check if the top tile is owned by current player
+            ) {
+                return true; // if top tile is owned by current player he can place a new tile
+            }
+        }
+        return false; // otherwise not...
+    }
 }

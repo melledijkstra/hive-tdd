@@ -9,7 +9,7 @@ public class QueenBeeStrategy extends SlideStrategy {
     @Override
     public boolean canMove(Board board, Coordinate from, Coordinate to) throws Hive.IllegalMove {
         // bee can only slide one space
-        if(!from.isNeighbour(to)) {
+        if (!from.isNeighbour(to)) {
             throw new Hive.IllegalMove("Queen bee can only move to neighbouring fields");
         }
         // bee is only allowed to go to empty fields
@@ -21,23 +21,18 @@ public class QueenBeeStrategy extends SlideStrategy {
     }
 
     @Override
-    public ArrayList<Coordinate> availableMoves(Board board, Hive.Player player, int fromQ, int fromR) {
+    public ArrayList<Coordinate> availableMoves(Board board, Coordinate from) {
         ArrayList<Coordinate> moves = new ArrayList<>();
-        Coordinate from = new Coordinate(fromQ, fromR);
         for (Coordinate neighbour : from.getNeighbours()) {
-            try {
-                Field field = board.getPlayField().get(neighbour);
-                if (canSlide(board, from, neighbour) && field != null && field.getTiles().isEmpty()) {
-                    moves.add(neighbour);
-                }
-            } catch (Hive.IllegalMove ignored) {
+            if (canSlide(board, from, neighbour) && !board.isOccupied(neighbour)) {
+                moves.add(neighbour);
             }
         }
         return moves;
     }
 
     @Override
-    Integer getSlideLimit() {
+    Integer getDistanceLimit() {
         return 1;
     }
 }

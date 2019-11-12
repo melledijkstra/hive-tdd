@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 class BoardTest {
 
@@ -107,10 +108,10 @@ class BoardTest {
         HiveGame game = new HiveGame();
         game.placeFromInventory(Hive.TileType.QUEEN_BEE, 0, 0); // w
         game.placeFromInventory(Hive.TileType.SPIDER, 0, 0); // w
-        game.placeFromInventory(Hive.TileType.SOLDIER_ANT, 0, 0); // w
+        game.placeFromInventory(Hive.TileType.BEETLE, 0, 0); // w
         // move the top tile
         game.move(0, 0, -1, 1); // w
-        assertEquals(Hive.TileType.SOLDIER_ANT, game.getPlayField().get(new Coordinate(-1, 1)).peek().getType());
+        assertEquals(Hive.TileType.BEETLE, game.getPlayField().get(new Coordinate(-1, 1)).peek().getType());
     }
 
     @Test

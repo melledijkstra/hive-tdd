@@ -31,7 +31,7 @@ public class Field {
         return !tiles.isEmpty() ? tiles.peek() : null;
     }
 
-    boolean contains(Hive.TileType tileType) {
+    boolean containsTile(Hive.TileType tileType) {
         for (Tile tile : tiles) {
             if (tile.getType() == tileType) {
                 return true;

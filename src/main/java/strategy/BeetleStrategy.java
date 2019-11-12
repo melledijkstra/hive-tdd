@@ -10,31 +10,30 @@ public class BeetleStrategy extends SlideStrategy {
 
     @Override
     public boolean canMove(Board board, Coordinate from, Coordinate to) throws Hive.IllegalMove {
-        // beetle can only slide one space
-        if(!from.isNeighbour(to) && canSlide(board, from, to)) {
+        // beetle can only slide one space and only is able to slide to it
+        if(!from.isNeighbour(to)) {
             throw new Hive.IllegalMove("Beetle can only move to neighbouring fields");
+        }
+        if (!canSlide(board, from, to)) {
+            throw new Hive.IllegalMove("Beetle cannot slide to this position");
         }
 
         return true;
     }
 
     @Override
-    public ArrayList<Coordinate> availableMoves(Board board, Hive.Player player, int fromQ, int fromR) {
+    public ArrayList<Coordinate> availableMoves(Board board, Coordinate from) {
         ArrayList<Coordinate> moves = new ArrayList<>();
-        Coordinate from = new Coordinate(fromQ, fromR);
         for (Coordinate neighbour : from.getNeighbours()) {
-            try {
-                if (canSlide(board, from, neighbour)) {
-                    moves.add(neighbour);
-                }
-            } catch (Hive.IllegalMove ignored) {
+            if (canSlide(board, from, neighbour)) {
+                moves.add(neighbour);
             }
         }
         return moves;
     }
 
     @Override
-    Integer getSlideLimit() {
+    Integer getDistanceLimit() {
         return 1;
     }
 }
